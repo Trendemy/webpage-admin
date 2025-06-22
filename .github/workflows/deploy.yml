@@ -68,7 +68,7 @@ jobs:
           docker rm trendemy-admin || true
           docker run -d \
             --name trendemy-admin \
-            -p 3000:80 \
+            -p 3000:3000 \
             -e VITE_API_URL=${{ secrets.VITE_API_URL }} \
             ${{ steps.build-image.outputs.image }}
           docker system prune -f
