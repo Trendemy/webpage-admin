@@ -1,153 +1,158 @@
-import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import { useSectionName } from '~/hooks';
+import { useFieldArray } from 'react-hook-form';
 import ImageSelector from '~/components/ImageSelector';
 import { Input, Textarea } from '~/components/UI';
 
-const WhoJoinSection = forwardRef(
-   (
-      { section = {}, onInputChange, onUpdateChildOfSection, errors = {} },
-      ref
-   ) => {
-      const { sectionName } = useSectionName('joinSection');
-      const { title = '', objects = [], images = [] } = section;
-
-      return (
-         <section className='mb-10' ref={ref}>
-            <h3 className='text-xl font-semibold mb-5'>Who Join Section</h3>
+const WhoJoinSection = ({
+    name = 'joinSection',
+    register,
+    watch,
+    control,
+    errors = {},
+    isLoading
+}) => {
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: `${name}.objects`
+    });
+    return (
+        <section className='mb-10'>
+            <h3 className='text-xl font-bold uppercase mb-5'>
+                Who Join Section
+            </h3>
             <div className='flex lg:flex-row flex-col gap-10'>
-               <div className='flex-1'>
-                  <div className='mb-5'>
-                     <Input
-                        label='Tiêu đề: '
-                        name={sectionName('title')}
-                        value={title}
-                        onChange={onInputChange}
-                        error={errors.title}
-                     />
-                  </div>
-                  <div className='flex flex-wrap gap-5'>
-                     <div className='w-full flex justify-between'>
-                        <h5 className='text-sm font-medium'>Đối tượng:</h5>
-                        <span
-                           className='text-sm cursor-pointer select-none'
-                           onClick={() =>
-                              onUpdateChildOfSection(
-                                 sectionName('objects'),
-                                 'add',
-                                 {
-                                    image: '',
-                                    name: '',
-                                    description: ''
-                                 }
-                              )
-                           }
-                        >
-                           Thêm
-                        </span>
-                     </div>
-                     <div className='w-full'>
-                        {objects.map((object, index) => (
-                           <div key={index} className='mb-3'>
-                              <hr className='mb-3' />
-                              <div className='flex gap-5'>
-                                 <ImageSelector
-                                    src={object.image}
-                                    name={sectionName(
-                                       'objects',
-                                       index,
-                                       'image'
-                                    )}
-                                    className='size-28 rounded-full'
-                                    onChange={onInputChange}
-                                    error={!!errors.objects?.[index]?.image}
-                                 />
-                                 <div className='flex-1 flex flex-col gap-3'>
-                                    <Input
-                                       placeholder='Đối tượng'
-                                       name={sectionName(
-                                          'objects',
-                                          index,
-                                          'name'
-                                       )}
-                                       value={object.name}
-                                       onChange={onInputChange}
-                                       error={errors.objects?.[index]?.name}
-                                    />
-                                    <Textarea
-                                       placeholder='Mô tả'
-                                       name={sectionName(
-                                          'objects',
-                                          index,
-                                          'description'
-                                       )}
-                                       value={object.description}
-                                       onChange={onInputChange}
-                                       rows={3}
-                                       error={
-                                          errors.objects?.[index]?.description
-                                       }
-                                    />
-                                 </div>
-                              </div>
-                              <div className='text-right mt-3'>
-                                 <span
-                                    className='text-sm text-rose-600 cursor-pointer select-none'
-                                    onClick={() =>
-                                       onUpdateChildOfSection(
-                                          sectionName('objects', index),
-                                          'delete'
-                                       )
-                                    }
-                                 >
-                                    Xóa
-                                 </span>
-                              </div>
-                           </div>
-                        ))}
-                     </div>
-                  </div>
-               </div>
-               <div className='flex-1'>
-                  {errors?.images && (
-                     <p className='text-sm text-red-500 text-center mb-5'>
-                        {errors.images}
-                     </p>
-                  )}
-                  <div className='w-4/5 flex mx-auto gap-10'>
-                     <div className='flex-1 mt-auto'>
-                        <ImageSelector
-                           src={images[0]}
-                           name={sectionName('images', 0)}
-                           className='rounded-xl aspect-[1/1]'
-                           onChange={onInputChange}
+                <div className='flex-1'>
+                    <div className='mb-5'>
+                        <Input
+                            label='Tiêu đề: '
+                            {...register(`${name}.title`)}
+                            error={errors?.title?.message}
+                            disabled={isLoading}
                         />
-                     </div>
-                     <div className='flex-1'>
-                        <ImageSelector
-                           src={images[1]}
-                           name={sectionName('images', 1)}
-                           className='rounded-xl aspect-[1/2]'
-                           onChange={onInputChange}
-                        />
-                     </div>
-                  </div>
-               </div>
+                    </div>
+                    <div className='flex flex-wrap gap-1'>
+                        <div className='w-full flex justify-between items-center'>
+                            <h5 className='text-lg font-semibold uppercase'>
+                                danh sách đối tượng
+                            </h5>
+                            <button
+                                type='button'
+                                className='text-sm text-blue-500 uppercase btn-link'
+                                onClick={() =>
+                                    !isLoading &&
+                                    append({
+                                        image: '',
+                                        name: '',
+                                        description: ''
+                                    })
+                                }
+                                disabled={isLoading}
+                            >
+                                Thêm đối tượng
+                            </button>
+                        </div>
+                        <div className='w-full flex flex-col gap-5'>
+                            {fields.map((field, index) => (
+                                <div
+                                    key={field.id}
+                                    className='border rounded-md p-3'
+                                >
+                                    <div className='flex gap-5'>
+                                        <ImageSelector
+                                            value={watch(
+                                                `${name}.objects.${index}.image`
+                                            )}
+                                            {...register(
+                                                `${name}.objects.${index}.image`
+                                            )}
+                                            className='size-28 rounded-full'
+                                            error={
+                                                !!errors.objects?.[index]?.image
+                                                    ?.message
+                                            }
+                                            disabled={isLoading}
+                                        />
+                                        <div className='flex-1 flex flex-col gap-3'>
+                                            <Input
+                                                placeholder='Đối tượng'
+                                                {...register(
+                                                    `${name}.objects.${index}.name`
+                                                )}
+                                                error={
+                                                    errors.objects?.[index]
+                                                        ?.name?.message
+                                                }
+                                                disabled={isLoading}
+                                            />
+                                            <Textarea
+                                                placeholder='Mô tả'
+                                                rows={3}
+                                                {...register(
+                                                    `${name}.objects.${index}.description`
+                                                )}
+                                                error={
+                                                    errors.objects?.[index]
+                                                        ?.description?.message
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className='text-right mt-1'>
+                                        <button
+                                            type='button'
+                                            className='text-sm text-red-500 uppercase btn-link'
+                                            onClick={() =>
+                                                !isLoading && remove(index)
+                                            }
+                                            disabled={isLoading}
+                                        >
+                                            Xóa đối tượng
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className='flex-1'>
+                    {errors?.images?.root?.message && (
+                        <p className='text-sm text-red-500 text-center mb-5'>
+                            {errors.images.root.message}
+                        </p>
+                    )}
+                    <div className='w-4/5 flex mx-auto gap-10'>
+                        <div className='flex-1 mt-auto'>
+                            <ImageSelector
+                                value={watch(`${name}.images.${0}`)}
+                                {...register(`${name}.images.${0}`)}
+                                className='rounded-xl aspect-[1/1]'
+                                error={!!errors?.images?.[0]}
+                                disabled={isLoading}
+                            />
+                        </div>
+                        <div className='flex-1'>
+                            <ImageSelector
+                                value={watch(`${name}.images.${1}`)}
+                                {...register(`${name}.images.${1}`)}
+                                className='rounded-xl aspect-[1/2]'
+                                error={!!errors?.images?.[1]}
+                                disabled={isLoading}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
-         </section>
-      );
-   }
-);
+        </section>
+    );
+};
 
-WhoJoinSection.displayName = 'WhoJoinSection';
 WhoJoinSection.propTypes = {
-   section: PropTypes.shape({
-      title: PropTypes.string,
-      objects: PropTypes.array
-   }),
-   onInputChange: PropTypes.func,
-   onUpdateChildOfSection: PropTypes.func,
-   errors: PropTypes.object
+    name: PropTypes.string,
+    register: PropTypes.func.isRequired,
+    watch: PropTypes.func.isRequired,
+    control: PropTypes.object.isRequired,
+    isLoading: PropTypes.bool,
+    errors: PropTypes.object
 };
 
 export default WhoJoinSection;

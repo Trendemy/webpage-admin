@@ -1,98 +1,90 @@
-import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import { useSectionName } from '~/hooks';
+import { useFieldArray } from 'react-hook-form';
 import { Input } from '~/components/UI';
 import { X } from '~/components/Icons';
 
-const CountSection = forwardRef(
-   (
-      { section = {}, onInputChange, onUpdateChildOfSection, errors = {} },
-      ref
-   ) => {
-      const { sectionName } = useSectionName('countSection');
-      return (
-         <section className='mb-10' ref={ref}>
-            <h3 className='text-xl font-semibold mb-5'>Counter Section</h3>
-            <div>
-               <span
-                  className='text-sm select-none cursor-pointer'
-                  onClick={() =>
-                     onUpdateChildOfSection(sectionName(), 'add', {
-                        name: '',
-                        number: 0,
-                        max: 0
-                     })
-                  }
-               >
-                  Thêm
-               </span>
-               {section?.map((item, index) => (
-                  <div
-                     key={index}
-                     className='relative group/item w-fit flex border-t py-5 gap-5'
-                  >
-                     <div className='absolute right-0 bottom-0 invisible group-hover/item:visible translate-x-full -translate-y-full pl-3'>
-                        <button
-                           className='h-fit w-fit text-rose-500 bg-transparent rounded-full border border-rose-300 focus:outline-none cursor-pointer p-1.5'
-                           onClick={() =>
-                              onUpdateChildOfSection(
-                                 sectionName(index),
-                                 'delete'
-                              )
-                           }
-                        >
-                           <X className='size-3.5' strokeWidth={1.5} />
-                        </button>
-                     </div>
-                     <div>
-                        <Input
-                           label='Tên'
-                           name={sectionName(index, 'name')}
-                           value={item?.name}
-                           onChange={onInputChange}
-                           error={errors?.[index]?.name}
-                        />
-                     </div>
-                     <div>
-                        <Input
-                           label='Giá trị'
-                           name={sectionName(index, 'number')}
-                           type='number'
-                           value={item?.number}
-                           onChange={onInputChange}
-                           error={errors?.[index]?.number}
-                        />
-                     </div>
+const CountSection = ({
+    name = 'countSection',
+    register,
+    control,
+    errors = {},
+    isLoading
+}) => {
+    const { fields, append, remove } = useFieldArray({ control, name });
 
-                     <div>
-                        <Input
-                           label='Giá trị lớn nhất'
-                           name={sectionName(index, 'max')}
-                           type='number'
-                           value={item?.max}
-                           onChange={onInputChange}
-                           error={errors?.[index]?.max}
-                        />
-                     </div>
-                  </div>
-               ))}
+    return (
+        <section className='mb-10'>
+            <div className='lg:w-1/2'>
+                <div className='flex justify-between items-center'>
+                    <h3 className='text-xl font-bold uppercase mb-5'>
+                        Counter Section
+                    </h3>
+                    <button
+                        type='button'
+                        className='text-sm text-blue-500 uppercase btn-link'
+                        onClick={() =>
+                            !isLoading &&
+                            append({ name: '', number: 0, max: 0 })
+                        }
+                        disabled={isLoading}
+                    >
+                        Thêm counter
+                    </button>
+                </div>
+                <div className='flex flex-col gap-5'>
+                    {fields?.map((field, index) => (
+                        <div key={field.id} className='border-b'>
+                            <div className='flex-1 flex gap-3'>
+                                <div className='flex-1'>
+                                    <Input
+                                        id={`${name}.${index}.name`}
+                                        label='Tên'
+                                        {...register(`${name}.${index}.name`)}
+                                        error={errors?.[index]?.name?.message}
+                                        disabled={isLoading}
+                                    />
+                                </div>
+                                <div className='flex-1'>
+                                    <Input
+                                        id={`${name}.${index}.number`}
+                                        label='Giá trị'
+                                        {...register(`${name}.${index}.number`)}
+                                        error={errors?.[index]?.number?.message}
+                                        disabled={isLoading}
+                                    />
+                                </div>
+                                <div className='flex-1'>
+                                    <Input
+                                        id={`${name}.${index}.max`}
+                                        label='Giá trị lớn nhất'
+                                        {...register(`${name}.${index}.max`)}
+                                        error={errors?.[index]?.max?.message}
+                                        disabled={isLoading}
+                                    />
+                                </div>
+                            </div>
+                            <div className='text-center mt-3'>
+                                <button
+                                    type='button'
+                                    className='text-sm text-red-500 uppercase btn-link'
+                                    onClick={() => !isLoading && remove(index)}
+                                    disabled={isLoading}
+                                >
+                                    Xoá counter {index + 1}
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
-         </section>
-      );
-   }
-);
-
-CountSection.displayName = 'CountSection';
+        </section>
+    );
+};
 CountSection.propTypes = {
-   section: PropTypes.arrayOf(
-      PropTypes.shape({
-         name: PropTypes.string,
-         number: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-         max: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-      })
-   ),
-   onInputChange: PropTypes.func,
-   onUpdateChildOfSection: PropTypes.func,
-   errors: PropTypes.object
+    name: PropTypes.string,
+    register: PropTypes.func.isRequired,
+    control: PropTypes.object.isRequired,
+    isLoading: PropTypes.bool,
+    errors: PropTypes.array
 };
 export default CountSection;

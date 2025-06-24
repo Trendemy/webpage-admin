@@ -11,19 +11,21 @@ import Certificate from './Certificate';
 import Article from './Article';
 import Education from './Education';
 import Project from './Project';
+import Minus from '~/components/Icons/Minus';
 
 export {
-   Project,
-   Education,
-   Article,
-   Certificate,
-   ChevronUp,
-   Logo,
-   X,
-   Plus,
-   Trash,
-   PencilSquare,
-   ArrowLeft,
-   Lock,
-   UnLock
+    Minus,
+    Project,
+    Education,
+    Article,
+    Certificate,
+    ChevronUp,
+    Logo,
+    X,
+    Plus,
+    Trash,
+    PencilSquare,
+    ArrowLeft,
+    Lock,
+    UnLock
 };

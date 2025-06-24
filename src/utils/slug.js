@@ -16,10 +16,10 @@ import { v4 as uuidv4 } from 'uuid';
  * slug("Hello World", true);
  * // Output: "hello-world-abc123" (random UUID suffix)
  */
-const slug = (text, uuid) =>
-	slugify(uuid ? text + '-' + uuidv4().slice(0, 6) : text, {
-		lower: true,
-		strict: true
-	});
+const slug = (text, withUuid) =>
+    slugify(withUuid ? text + '-' + uuidv4().slice(0, 6) : text, {
+        lower: true,
+        strict: true
+    });
 
 export default slug;

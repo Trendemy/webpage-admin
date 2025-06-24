@@ -1,33 +1,30 @@
 import PropTypes from 'prop-types';
 
-const X = ({
+const Minus = ({
     className,
+    stroke = 'currentColor',
     strokeWidth = 1.5,
-    fill = 'none',
-    stroke = 'currentColor'
+    fill = 'none'
 }) => {
     return (
         <svg
             xmlns='http://www.w3.org/2000/svg'
             viewBox='0 0 24 24'
-            fill={fill}
-            stroke={stroke}
             strokeWidth={strokeWidth}
+            stroke={stroke}
             className={className}
+            fill={fill}
         >
-            <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M6 18 18 6M6 6l12 12'
-            />
+            <path strokeLinecap='round' strokeLinejoin='round' d='M5 12h14' />
         </svg>
     );
 };
 
-X.propTypes = {
+Minus.propTypes = {
     className: PropTypes.string,
-    fill: PropTypes.string,
     stroke: PropTypes.string,
+    fill: PropTypes.string,
     strokeWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
-export default X;
+
+export default Minus;
