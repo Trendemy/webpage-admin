@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .btn-link {
+        @apply bg-transparent underline-offset-4 hover:underline disabled:opacity-60 disabled:cursor-not-allowed hover:disabled:no-underline select-none outline-none;
+    }
+}

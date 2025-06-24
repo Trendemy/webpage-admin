@@ -1,174 +1,91 @@
-import { forwardRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { AdvancedImage } from '@cloudinary/react';
-import { teacherService } from '~/services';
-import { useSectionName } from '~/hooks';
-import cloudinary from '~/config/cloudinary';
+import { useFieldArray } from 'react-hook-form';
+import TeacherCard from '~/app/sections/TeacherSection/components/TeacherCard';
 import { Input } from '~/components/UI';
-import { Plus, X } from '~/components/Icons';
 
-const TeacherSection = forwardRef(
-   (
-      { section = {}, onInputChange, onUpdateChildOfSection, errors = {} },
-      ref
-   ) => {
-      const { sectionName } = useSectionName('teacherSection');
-      const { title = '', subtitle = '', teachers = [] } = section;
-
-      const [teacherList, setTeacherList] = useState({
-         all: [],
-         added: [],
-         available: []
-      });
-
-      useEffect(() => {
-         (async () => {
-            const data = await teacherService.get();
-            if (data) {
-               setTeacherList({
-                  all: data,
-                  added: data.filter((teacher) =>
-                     teachers.includes(teacher.id)
-                  ),
-                  available: data.filter(
-                     (teacher) => !teachers.includes(teacher.id)
-                  )
-               });
-            }
-         })();
-      }, [teachers, teachers.length]);
-
-      return (
-         <section className='mb-5' ref={ref}>
-            <h3 className='text-xl font-semibold mb-2'>Teacher Section</h3>
+const TeacherSection = ({
+    name = 'teacherSection',
+    register,
+    control,
+    errors = {},
+    isLoading
+}) => {
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: `${name}.teachers`
+    });
+    return (
+        <section className='mb-5'>
+            <h3 className='text-xl font-bold uppercase mb-2'>
+                Teacher Section
+            </h3>
             <div className='lg:w-1/2'>
-               <div className='mb-5'>
-                  <Input
-                     label='Tiêu đề: '
-                     name={sectionName('title')}
-                     value={title}
-                     onChange={onInputChange}
-                     error={errors.title}
-                  />
-               </div>
-               <div className='mb-5'>
-                  <Input
-                     label='Tiêu đề phụ: '
-                     name={sectionName('subtitle')}
-                     value={subtitle}
-                     onChange={onInputChange}
-                  />
-               </div>
+                <div className='mb-5'>
+                    <Input
+                        id={`${name}.title`}
+                        label='Tiêu đề'
+                        {...register(`${name}.title`)}
+                        error={errors?.title?.message}
+                        disabled={isLoading}
+                    />
+                </div>
+                <div className='mb-5'>
+                    <Input
+                        id={`${name}.subtitle`}
+                        label='Tiêu đề phụ'
+                        {...register(`${name}.subtitle`)}
+                        error={errors?.subtitle?.message}
+                        disabled={isLoading}
+                    />
+                </div>
+                <hr />
             </div>
-            <div className='mb-3'>
-               <h5 className='text-sm font-medium'>Danh sách giảng viên:</h5>
+            <h5 className='text-lg font-semibold text-center uppercase my-2'>
+                Danh sách giảng viên
+            </h5>
+            <div className='text-center'>
+                <button
+                    type='button'
+                    className='text-blue-500 text-sm uppercase btn-link'
+                    onClick={() =>
+                        !isLoading &&
+                        append({
+                            avatar: '',
+                            name: '',
+                            specialized: '',
+                            description: '',
+                            facebook: '',
+                            linkedin: ''
+                        })
+                    }
+                    disabled={isLoading}
+                >
+                    Thêm giảng viên
+                </button>
             </div>
-            <div className='flex'>
-               <div className='flex-1'>
-                  <h5 className='text-sm font-medium mb-3'>
-                     Tất cả giảng viên
-                  </h5>
-                  <div className='flex flex-wrap gap-5'>
-                     {teacherList.available.map((teacher) => (
-                        <div
-                           key={teacher.id}
-                           className='relative flex items-center border rounded-md gap-2 p-3'
-                        >
-                           <button
-                              className='absolute size-6 top-0 right-0 bg-white rounded-full shadow-lg translate-x-1/2 -translate-y-1/2 p-1'
-                              onClick={() =>
-                                 onUpdateChildOfSection(
-                                    sectionName('teachers'),
-                                    'add',
-                                    teacher.id
-                                 )
-                              }
-                           >
-                              <Plus strokeWidth={1.5} />
-                           </button>
-                           <AdvancedImage
-                              cldImg={cloudinary
-                                 .image(teacher.avatar)
-                                 .format('auto')
-                                 .quality('auto')
-                                 .addFlag('progressive')}
-                              className='size-12 object-cover rounded-full'
-                              loading='lazy'
-                           />
-                           <div className='flex flex-col'>
-                              <p className='text-sm font-medium'>
-                                 {teacher.name}
-                              </p>
-                              <span className='text-sm text-gray-700'>
-                                 {teacher.specialized}
-                              </span>
-                           </div>
-                        </div>
-                     ))}
-                  </div>
-               </div>
-               <div className='w-px bg-gray-200 mx-3'></div>
-               <div className='flex-1'>
-                  <h5 className='text-sm font-medium mb-3'>
-                     Giảng viên đã thêm
-                  </h5>
-                  <div className='flex flex-wrap gap-5'>
-                     {teacherList.added.map((teacher, index) => (
-                        <div
-                           key={index}
-                           className='relative flex items-center border rounded-md gap-2 p-3'
-                        >
-                           <button
-                              className='absolute size-6 top-0 right-0 bg-white text-rose-600 rounded-full shadow-lg translate-x-1/2 -translate-y-1/2 p-1'
-                              onClick={() =>
-                                 onUpdateChildOfSection(
-                                    sectionName(
-                                       'teachers',
-                                       teachers.indexOf(teacher.id)
-                                    ),
-                                    'delete'
-                                 )
-                              }
-                           >
-                              <X strokeWidth={1.5} />
-                           </button>
-                           <AdvancedImage
-                              cldImg={cloudinary
-                                 .image(teacher.avatar)
-                                 .format('auto')
-                                 .quality('auto')
-                                 .addFlag('progressive')}
-                              className='size-12 object-cover rounded-full'
-                              loading='lazy'
-                           />
-                           <div className='flex flex-col'>
-                              <p className='text-sm font-medium'>
-                                 {teacher.name}
-                              </p>
-                              <span className='text-sm text-gray-700'>
-                                 {teacher.specialized}
-                              </span>
-                           </div>
-                        </div>
-                     ))}
-                  </div>
-               </div>
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 mt-5'>
+                {fields.map((field, index) => (
+                    <TeacherCard
+                        key={field.id}
+                        name={`${name}.teachers.${index}`}
+                        register={register}
+                        control={control}
+                        onRemove={() => remove(index)}
+                        errors={errors?.teachers?.[index]}
+                        isLoading={isLoading}
+                    />
+                ))}
             </div>
-         </section>
-      );
-   }
-);
+        </section>
+    );
+};
 
-TeacherSection.displayName = 'TeacherSection';
 TeacherSection.propTypes = {
-   section: PropTypes.shape({
-      title: PropTypes.string,
-      subtitle: PropTypes.string,
-      teachers: PropTypes.array
-   }),
-   onInputChange: PropTypes.func,
-   onUpdateChildOfSection: PropTypes.func,
-   errors: PropTypes.object
+    name: PropTypes.string,
+    register: PropTypes.func.isRequired,
+    control: PropTypes.object.isRequired,
+    isLoading: PropTypes.bool,
+    errors: PropTypes.object
 };
 
 export default TeacherSection;

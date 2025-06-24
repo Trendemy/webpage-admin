@@ -18,19 +18,19 @@ import uploadToCloudinary from './uploadToCloudinary';
  * // { name: "Product A", image: "https://cloudinary.com/uploaded-image-url" }
  */
 const processData = async (data) => {
-	const processItem = async (item) => {
-		if (item && item.file && item.file instanceof File) {
-			item = await uploadToCloudinary(item.file);
-		}
-		for (let key in item) {
-			if (item[key] && typeof item[key] === 'object') {
-				item[key] = await processItem(item[key]);
-			}
-		}
-		return item;
-	};
+    const processItem = async (item) => {
+        if (item && item instanceof File) {
+            item = await uploadToCloudinary(item);
+        }
+        for (let key in item) {
+            if (item[key] && typeof item[key] === 'object') {
+                item[key] = await processItem(item[key]);
+            }
+        }
+        return item;
+    };
 
-	return processItem(data);
+    return processItem(data);
 };
 
 export default processData;

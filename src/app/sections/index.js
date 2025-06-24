@@ -14,24 +14,22 @@ import CourseInfoSection from './CourseInfoSection';
 import FeedbackSection from './FeedbackSection';
 import TeacherSection from './TeacherSection';
 import GraduationSection from './GraduationSection';
-import Box from './Box';
 
 export {
-   Box,
-   HeroSection,
-   IntroduceSection,
-   GoalSection,
-   ContentSection,
-   ValueSection,
-   ProductSection,
-   ProfileSection,
-   CountSection,
-   OverviewSection,
-   SummarySection,
-   CoreSection,
-   WhoJoinSection,
-   CourseInfoSection,
-   FeedbackSection,
-   TeacherSection,
-   GraduationSection
+    HeroSection,
+    IntroduceSection,
+    GoalSection,
+    ContentSection,
+    ValueSection,
+    ProductSection,
+    ProfileSection,
+    CountSection,
+    OverviewSection,
+    SummarySection,
+    CoreSection,
+    WhoJoinSection,
+    CourseInfoSection,
+    FeedbackSection,
+    TeacherSection,
+    GraduationSection
 };
