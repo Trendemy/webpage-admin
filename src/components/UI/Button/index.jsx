@@ -15,7 +15,7 @@ const Button = ({
     ...props
 }) => {
     const baseStyles =
-        'text-sm font-medium rounded-lg focus:outline-none focus:ring-4 select-none px-5 py-2.5';
+        'text-sm font-medium rounded-lg focus:outline-none focus:ring-4 transition-colors duration-200 select-none px-5 py-2.5';
     const variants = {
         default: 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300',
         alternative:
