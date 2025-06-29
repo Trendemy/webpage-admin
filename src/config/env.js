@@ -1,7 +1,7 @@
 import { getEnv } from '~/utils';
 
 const APP_NAME = getEnv('VITE_APP_NAME', 'Trendemy');
-const NODE_ENV = getEnv('VITE_NODE_ENV', 'production');
+const NODE_ENV = getEnv('VITE_NODE_ENV');
 
 // firebase
 const API_KEY = getEnv('VITE_API_KEY');
@@ -16,16 +16,16 @@ const CLOUDINARY_NAME = getEnv('VITE_CLOUDINARY_NAME');
 const CLOUDINARY_UPLOAD_PRESET = getEnv('VITE_CLOUDINARY_UPLOAD_PRESET');
 
 export {
-   APP_NAME,
-   NODE_ENV,
-   API_KEY,
-   AUTH_DOMAIN,
-   PROJECT_ID,
-   STORAGE_BUCKET,
-   MESSAGING_SENDER_ID,
-   APP_ID,
-   MEASUREMENT_ID,
-   CLOUDINARY_URL,
-   CLOUDINARY_NAME,
-   CLOUDINARY_UPLOAD_PRESET
+    APP_NAME,
+    NODE_ENV,
+    API_KEY,
+    AUTH_DOMAIN,
+    PROJECT_ID,
+    STORAGE_BUCKET,
+    MESSAGING_SENDER_ID,
+    APP_ID,
+    MEASUREMENT_ID,
+    CLOUDINARY_URL,
+    CLOUDINARY_NAME,
+    CLOUDINARY_UPLOAD_PRESET
 };
