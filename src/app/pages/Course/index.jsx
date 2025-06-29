@@ -21,10 +21,12 @@ import {
 import { schema } from '~/validators/course.validator';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useForm } from 'react-hook-form';
+import { NotFound } from '~/app/pages/Error';
 
 const CoursePage = () => {
     const { slug } = useParams();
     const [isLoading, setIsLoading] = useState(false);
+    const [isFound, setIsFound] = useState(true);
     const navigate = useNavigate();
     const {
         register,
@@ -46,16 +48,18 @@ const CoursePage = () => {
                 setIsLoading(true);
                 const data = await courseService.getOne({ slug });
                 if (data) reset(data);
-                else navigate('/', { replace: true });
+                else setIsFound(false);
             } catch (error) {
                 logger('error load course', error);
-                navigate('/', { replace: true });
+                setIsFound(false);
             } finally {
                 NProgress.done();
                 setIsLoading(false);
             }
         })();
     }, [navigate, reset, slug]);
+
+    if (!isLoading && !isFound) return <NotFound />;
 
     const onSubmit = async ({ id, ...data }) => {
         try {
