@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import RootLayout from '~/app/layouts';
 import CoursePage from '~/app/pages/Course';
-import ErrorPage from '~/app/pages/Error';
+import { ErrorBoundary, NotFound } from '~/app/pages/Error';
 import HomePage from '~/app/pages/Home';
 import TeacherPage from '~/app/pages/Teacher';
 
@@ -29,11 +29,11 @@ const router = createBrowserRouter([
                 ]
             }
         ],
-        errorElement: <ErrorPage />
+        errorElement: <ErrorBoundary />
     },
     {
         path: '*',
-        element: <ErrorPage />
+        element: <NotFound />
     }
 ]);
 

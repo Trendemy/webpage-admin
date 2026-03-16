@@ -16,11 +16,13 @@ import {
 } from '~/app/sections';
 import { useForm } from 'react-hook-form';
 import { schema } from '~/validators/teacher.validator';
+import { NotFound } from '~/app/pages/Error';
 
 const TeacherPage = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const [isFound, setIsFound] = useState(true);
     const {
         register,
         handleSubmit,
@@ -41,16 +43,18 @@ const TeacherPage = () => {
                 setIsLoading(true);
                 const data = await teacherService.getOne({ slug });
                 if (data) reset(data);
-                else navigate('/?tab=teachers', { replace: true });
+                else setIsFound(false);
             } catch (error) {
                 logger('get teacher', error);
-                navigate('/?tab=teachers', { replace: true });
+                setIsFound(false);
             } finally {
                 NProgress.done();
                 setIsLoading(false);
             }
         })();
     }, [navigate, reset, slug]);
+
+    if (!isLoading && !isFound) return <NotFound />;
 
     const onSubmit = async ({ id, ...data }) => {
         try {

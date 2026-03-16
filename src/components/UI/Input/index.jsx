@@ -43,7 +43,7 @@ const Input = forwardRef(
                     id={id}
                     name={name}
                     className={cn(
-                        'w-full block bg-gray-50 border-gray-300 border text-gray-900 text-sm rounded-md focus:bg-gray-50 focus:ring-blue-500 focus:border-blue-500 outline-none disabled:cursor-not-allowed disabled:opacity-60 p-2.5',
+                        'w-full block bg-gray-50 border-gray-300 border text-gray-900 text-sm rounded-md focus:bg-gray-50 focus:ring-blue-500 focus:border-blue-500 outline-none disabled:cursor-not-allowed disabled:opacity-60 transition-colors duration-200 p-2.5',
                         {
                             'border-red-500 bg-red-200/25 focus:bg-red-200/25 focus:ring-red-500 focus:border-red-500':
                                 error

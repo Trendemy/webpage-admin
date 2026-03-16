@@ -61,7 +61,7 @@ const SignIn = () => {
                     </div>
                     <button
                         type='submit'
-                        className='flex w-full justify-center items-center rounded-md bg-blue-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-blue-500 shadow-sm outline-none'
+                        className='flex w-full justify-center items-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-lg hover:shadow-xl outline-none'
                     >
                         Đăng nhập
                     </button>

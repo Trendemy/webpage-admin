@@ -35,7 +35,7 @@ const Textarea = forwardRef(
                     rows={rows}
                     ref={ref}
                     className={cn(
-                        'w-full block text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 focus:bg-gray-50 focus:ring-blue-500 focus:border-blue-500 outline-none disabled:cursor-not-allowed disabled:opacity-60 p-2.5',
+                        'w-full block text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 focus:bg-gray-50 focus:ring-blue-500 focus:border-blue-500 outline-none disabled:cursor-not-allowed disabled:opacity-60 transition-colors duration-200 p-2.5',
                         {
                             'border-red-500 bg-red-200/25 focus:bg-red-200/25 focus:ring-red-500 focus:border-red-500':
                                 error

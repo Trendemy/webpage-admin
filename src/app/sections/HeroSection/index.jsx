@@ -59,7 +59,7 @@ const HeroSection = ({
                             error={!!errors?.images?.[0]}
                             disabled={isLoading}
                         />
-                        <div className='absolute w-1/2 bottom-0 border-t-8 border-r-8'>
+                        <div className='absolute w-1/2 bottom-0 border-t-8 border-r-8 border-white'>
                             <ImageSelector
                                 value={watch(`${name}.images.${1}`)}
                                 {...register(`${name}.images.${1}`)}
