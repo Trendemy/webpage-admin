@@ -8,7 +8,7 @@ on:
 env:
   AWS_REGION: ap-southeast-1
   ECR_REPOSITORY: trendemy/webpage-admin
-  EC2_HOST: "47.130.114.34"
+  EC2_HOST: "3.0.93.84"
 
 permissions:
   contents: read
